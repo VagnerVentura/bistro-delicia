@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Gorjetas vs Total da Conta</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <h2>Gorjeta em função do Total da Conta</h2>
+    <canvas id="grafico" width="400" height="100"></canvas>
+
+    <script>
+        fetch('graf.php')
+            .then(response => response.json())
+            .then(dados => {
+                const ctx = document.getElementById('grafico').getContext('2d');
+                new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: dados.totais,
+                        datasets: [{
+                            label: 'Gorjetas (R$)',
+                            data: dados.gorjetas,
+                            backgroundColor: 'rgba(54, 162, 235, 0.7)',
+                            borderColor: 'rgba(54, 162, 235, 1)',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            x: {
+                                title: {
+                                    display: true,
+                                    text: 'Total da Conta (R$)'
+                                }
+                            },
+                            y: {
+                                beginAtZero: true,
+                                title: {
+                                    display: true,
+                                    text: 'Gorjeta (R$)'
+                                }
+                            }
+                        }
+                    }
+                });
+            })
+            .catch(error => {
+                console.error('Erro ao carregar os dados:', error);
+            });
+    </script>
+</body>
+</html>
